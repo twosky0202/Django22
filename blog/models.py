@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 import os.path
 
 # Create your models here.
@@ -15,9 +16,10 @@ class Post(models.Model):
     update_at = models.DateTimeField(auto_now=True)
 
     # 추후 author 작성'
+    author = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
 
     def __str__(self):
-        return f'[{self.pk}]{self.title} {self.created_at}'
+        return f'[{self.pk}]{self.title}::{self.author} : {self.created_at}'
 
     def get_absolute_url(self):
         return f'/blog/{self.pk}/'
