@@ -15,3 +15,127 @@
     <h3>공사중...</h3>
 </body>
 </html>
+
+<!--웹사이트 작동 구조
+1. 클라이언트 doitdjango.com 접속 -> 2. url.py 확인 -> 3. views.py 확인 -> 4. model.py -> 5. Database
+-> 4. -> 3. -> 6. 준비된 자료(index.html)를 템플릿에 채워 출력 -> 클라이언트 doitdjango.com 접속
+-->
+
+<!--
+pip install django
+
+django-admin startprogect 프로젝트명 .
+
+데이터베이스 생성
+python manage.py migrate
+
+ls입력하면 새로 생성된 db.sqlite3
+
+관리자 계정 생성
+python manage.py createsuperuser
+python manage.py runserver
+
+여기부터하기~~>앱 만들기
+python manage.py startapp 앱명
+
+프로젝트폴더 settings.py에 INSTALLED_APPS 리스트에 'app명'추가
+TIME_ZONE = 'Asia/Seoul' USE_TZ = False 우리나라 기준으로 작성 시간 설정
+
+앱폴더 models.py에 모델 작성
+
+데이터베이스에 모델 반영 (모델 바뀔때마다 해주기!!)
+python manage.py makemigrations
+python manage.py migrate
+
+앱폴더 admin.py에 from .models import 모델명 등록
+
+관리자페이지(/admin)에 정보 입력
+
+프로젝트폴더 urls.py에 앱추가한수만큼 url만들기
+
+앱폴더 urls.py 생성 후
+from django.urls import path
+from . import views
+urlpatterns=[
+    path('경로/', views.함수명)
+] 추가하기
+
+앱폴더/templates/앱폴더 그 아래에 .html만들기
+
+앱폴더 view.py
+
+list.html, detail.html
+
+앱폴더 models.py
+def get_absolute_url(self):
+    return f' /blog/{self.pk}/'
+
+앱폴더 아래에 static/앱명/bootstrap 만들어 css, js 넣기 ex)bootstrap.min.css, bootstrap.min.css.map
+html에 {% load static %}추가, css링크: href = {% static '경로' %}
+
+프로젝트폴더 settings.py 미디어파일관리
+맨위에: import os
+맨아래에:
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, '_media') _media 폴더이고 url은 /media/
+
+앱폴더 models.py head_image필드 추가
+pip install Pillow : 파이썬에서 이미지를 처리하기 위한 라이브러리
+
+프로젝트폴더 url.py
+from django.conf import settings
+from django.conf.urls.static import static
+=>static폴더와 settings.py 파일을 사용해야 하기 때문
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+_list.html {{p.head_image.url}}
+_detail.html {{post.heade_image.html}}
+
+랜덤이미지
+https://picsum.photos/seed/{{p.pk}}/800/200
+
+첨부파일이 있는 경우 다운로드버튼
+_detail.html에 a태그 추가 태그 안에 download 꼭 명시
+앱폴더/models.py import os
+get_file_name()
+get_file_ext()
+
+포스트 미리보기 truncatewords, truncatechars
+요약문 필드 앱폴터/models.py class Post hook_text
+
+
+테스트 주도 개발
+앱폴더/tests.py
+pip install beautifulsoup4
+python manage.py test
+
+메인영역 모듈화
+base.html main-area인 div요소 내부 삭제
+ extends 'blog/base.html'
+{% block main_area %} {% endblock %}
+
+test_post_list만 테스트
+python manage.py test blog.tests.TestView.test_post_list
+
+제목 블록
+{% block head_title %} {% endblock %}
+
+내비게이션바
+앱명/test.py navbar_test()
+navbar.html 모듈화, 경로 수정
+
+작성자추가
+author필드 구현
+models.py Post에 author추가
+
+category기능 구현
+models.py Category모델 만들기. class Post에 Category필드추가
+admin.py에 Category 모델 등록
+포스트목록페이지 수정
+test.py
+views.py get_context_data()
+
+카테고리 페이지 만들기
+models.py get_absolute_url
+views.py category_page
+-->

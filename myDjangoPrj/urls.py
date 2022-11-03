@@ -21,7 +21,7 @@ from django.conf.urls.static import static
 urlpatterns = [ # IP주소/
     path('admin/', admin.site.urls), # IP주소/adimin
     path('blog/', include('blog.urls')), # IP주소/blog/
-    path('', include('single_pages.urls'))
+    path('', include('single_pages.urls')) # IP주소
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

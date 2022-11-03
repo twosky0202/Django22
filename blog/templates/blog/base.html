@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-{% load static %}
+{% load static %}<!--static파일 사용 선언-->
 <html lang="ko">
   <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block head_title %}Blog{% endblock %}</title>
-    <link href="{% static 'blog/bootstrap4/css/bootstrap.min.css' %}" rel="stylesheet" type="text/css" media="screen">
+    <link href="{% static 'blog/bootstrap4/css/bootstrap.min.css' %}" rel="stylesheet" type="text/css" media="screen"> <!--static파일 사용-->
     <script src="https://kit.fontawesome.com/bd2d001487.js" crossorigin="anonymous"></script>
   </head>
   <body>
