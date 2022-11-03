@@ -18,7 +18,7 @@
             </div>
             <!-- Post categories-->
             {% if post.category %}
-            <a class="badge bg-secondary text-decoration-none link-light" href="{{post.category.get_absolute_url}}">{{post.category}}</a>
+            <a class="badge bg-secondary text-decoration-none link-light" href="{{post.category.get_absolute_url}}"> {{post.category}}</a>
             {% else %}
             <a class="badge bg-secondary text-decoration-none link-light" href="/blog/category/no_category">미분류</a>
             {% endif %}
