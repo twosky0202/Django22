@@ -3,6 +3,16 @@ from django.contrib.auth.models import User
 import os.path
 
 # Create your models here.
+class Tag(models.Model):
+    name = models.CharField(max_length=50, unique=True)
+    slug = models.SlugField(max_length=200, unique=True, allow_unicode=True)
+
+    def __str__(self):
+        return self.name
+
+    def get_absolute_url(self):
+        return f'/blog/tag/{self.slug}/'
+
 class Category(models.Model):
     name = models.CharField(max_length=50, unique=True) #각 카테고리의 이름을 담는 필드. unique=True: name 중복 불가
     slug = models.SlugField(max_length=200, unique=True, allow_unicode=True) # SlugField는 사람이 읽을 수 있는 텍스트로 고유 URL을 만들고 싶을때
@@ -33,6 +43,8 @@ class Post(models.Model):
     author = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)  #이 포스트의 작성자가 데이터베이스에서 삭제되었을 때 작성자명을 빈칸으로둔다.
 
     category = models.ForeignKey(Category, null=True, blank=True, on_delete=models.SET_NULL) #blank=True: 관리자페이지에서 카테고리 빈칸 가능
+
+    tags = models.ManyToManyField(Tag, blank=True)
 
     def __str__(self):
         return f'[{self.pk}]{self.title}::{self.author} : {self.created_at}' #관리자페이지에서 pk값, 제목, 작성자, 날짜 보이기

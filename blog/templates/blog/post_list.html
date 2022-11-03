@@ -3,7 +3,13 @@
 {% block main_area %}
     <h2>Blog
         {% if category %}
-            - <span class="badge badge-secondary">{{category}}</span>
+        - <span class="badge badge-secondary">{{category}}</span>
+        {% endif %}
+        {% if tag %}
+        - <i class="fas fa-tag"></i>
+        <span class="badge badge-secondary">
+            {{tag}} (({{tag.post_set.count}}))
+        </span>
         {% endif %}
     </h2>
         {% if post_list.exists %} <!--exists() 해당 객체가 있는지 없는지-->
@@ -36,6 +42,17 @@
                     {% endif %}
 
                     <p class="card-text">{{p.content | truncatechars:100 }}</p> <!-- | 포스트 미리보기 기능. 글자수기준 100 자름, 단어수는 truncatwords-->
+                    {% if p.tags.exists %}
+                        <i class="fas fa-tag"></i>
+                        {% for t in p.tags.iterator %}
+                        <span class="badge badge-pill badge-light">
+                            <a href="{{t.get_absolute_url}}">
+                                {{t}}
+                            </a>
+                        </span>
+                        {% endfor %}
+                    {% endif %}
+                    <br><br>
                     <a class="btn btn-primary" href="{{p.get_absolute_url}}">Read more →</a>
                 </div>
                 <div class="card-footer">
