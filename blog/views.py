@@ -1,8 +1,32 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from . models import Post, Category, Tag
-from django.views.generic import ListView, DetailView
+from django.views.generic import ListView, DetailView, CreateView
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 
 # Create your views here.
+class PostCreate(LoginRequiredMixin,UserPassesTestMixin,CreateView):
+    model = Post
+    fields = ['title', 'hook_text', 'content', 'head_image', 'file_upload', 'category']
+    # 모델명_form.html 자동 호출
+
+    def test_func(self):
+        return self.request.user.is_superuser or self.request.user.is_staff
+
+    def form_valid(self, form):
+        current_user = self.request.user
+        if current_user.is_authenticated and (current_user.is_superuser or current_user.is_staff):
+            form.instance.author = current_user
+            return super(PostCreate,self).form_valid(form)
+        else:
+            return redirect('/blog/')
+    
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super(PostCreate,self).get_context_data()
+        context['categories'] = Category.objects.all() #모든 카테고리를 가져옴
+        context['no_category_post_count'] = Post.objects.filter(category=None).count #카테고리가 지정되지 않은 포스트의 개수를 세라
+        return context
+
+
 class PostList(ListView): #CBV방식
     model = Post
     ordering = '-pk' #pk값이 작은 순서대로
