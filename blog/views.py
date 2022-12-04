@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from . models import Post, Category, Tag, Comment
+from .models import Post, Category, Tag, Comment
 from django.views.generic import ListView, DetailView, CreateView, UpdateView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.core.exceptions import PermissionDenied
@@ -7,6 +7,21 @@ from django.utils.text import slugify
 from .forms import CommentForm
 from django.shortcuts import get_object_or_404
 from django.db.models import Q
+from rest_framework import viewsets
+from .serializers import postSerializer
+
+class postViewSet(viewsets.ModelViewSet):
+    queryset = Post.objects.all()
+    serializer_class = postSerializer
+
+def delete_comment(request,pk):
+    comment = get_object_or_404(Comment, pk=pk)
+    post = comment.post
+    if request.user.is_authenticated and request.user == comment.author:
+        comment.delete()
+        return redirect(post.get_absolute_url())
+    else:
+        PermissionDenied
 
 # Create your views here.
 class PostUpdate(LoginRequiredMixin,UpdateView):
